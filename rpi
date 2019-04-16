@@ -30,8 +30,8 @@ echo "Starting Jakubs Script to install all software from clean image      ";
 sleep 1
 sudo apt-get update
 bash <(curl -sL https://raw.githubusercontent.com/node-red/raspbian-deb-package/master/resources/update-nodejs-and-nodered)
-npm install -g node-red-admin
-npm install node-red-dashboard
+sudo npm install -g node-red-admin
+sudo npm install node-red-dashboard
 sudo systemctl enable nodered.service
 sudo apt-get install nginx-full certbot -y
 sudo certbot certonly --staging --authenticator standalone -d reversednwebsite.com  --pre-hook "service nginx stop" --post-hook "service nginx start"
@@ -43,7 +43,7 @@ sudo apt-get update
 sudo apt-get install mosquitto mosquitto-clients
 
 
-ccd /home/pi
+cd /home/pi
 rm -rf cliflash
 mkdir temp
 cd temp
