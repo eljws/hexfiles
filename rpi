@@ -61,3 +61,7 @@ cd /home/pi/cliflash
 make
 cd /home/pi
 sed -i -e  "\$aPATH=\$PATH:/home/pi/cliflash"  .bashrc
+
+cd /etc/udev/rules.d/
+sudo wget https://www.pjrc.com/teensy/49-teensy.rules
+sudo apt-get git
