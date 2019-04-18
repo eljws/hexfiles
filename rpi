@@ -33,6 +33,9 @@ bash <(curl -sL https://raw.githubusercontent.com/node-red/raspbian-deb-package/
 cd /home/pi/.node-red/
 sudo npm install -g node-red-admin
 sudo npm install node-red-dashboard
+sudo npm install node-red-contrib-arp
+sudo npm install node-red-contrib-browser-utils
+
 sudo systemctl enable nodered.service
 cd /home/pi
 sudo apt-get install nginx-full certbot -y
