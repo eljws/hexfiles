@@ -29,6 +29,7 @@ echo "Starting Jakubs Script to install all software from clean image      ";
 
 sleep 1
 sudo apt-get update
+sudo apt-get install moreutils
 bash <(curl -sL https://raw.githubusercontent.com/node-red/raspbian-deb-package/master/resources/update-nodejs-and-nodered)
 cd /home/pi/.node-red/
 sudo npm install -g node-red-admin
