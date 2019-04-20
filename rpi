@@ -40,7 +40,7 @@ sudo npm install node-red-contrib-browser-utils
 sudo systemctl enable nodered.service
 
 myhostnamedot="$(dig -x $(dig +short myip.opendns.com @resolver1.opendns.com) +short)"
-hostname=`echo $myhostnamedot | sed "s/\.$//"`
+myhostname=`echo $myhostnamedot | sed "s/\.$//"`
 
 cd /home/pi
 sudo wget http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key
