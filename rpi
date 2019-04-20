@@ -31,6 +31,7 @@ sleep 1
 sudo apt-get update
 bash <(curl -sL https://raw.githubusercontent.com/node-red/raspbian-deb-package/master/resources/update-nodejs-and-nodered)
 sudo apt-get install moreutils -y
+sudo apt-get install dnsutils
 cd /home/pi/.node-red/
 sudo npm install -g node-red-admin
 sudo npm install node-red-dashboard
@@ -54,7 +55,12 @@ sudo apt-key add mosquitto-repo.gpg.key
 cd /etc/apt/sources.list.d/
 sudo wget http://repo.mosquitto.org/debian/mosquitto-stretch.list
 sudo apt-get update
-sudo apt-get install mosquitto
+sudo apt-get install mosquitto -y
+
+sudo rm /etc/mosquitto/mosquitto.conf
+sudo wget https://raw.githubusercontent.com/SET-LTD/hexfiles/master/mosquitto.conf -P /etc/mosquitto
+sudo sed -i "s/xxx/${myhostname}/g" /etc/mosquitto/mosquitto.conf
+
 
 
 cd /home/pi
@@ -75,4 +81,4 @@ sed -i -e  "\$aPATH=\$PATH:/home/pi/cliflash"  .bashrc
 
 cd /etc/udev/rules.d/
 sudo wget https://www.pjrc.com/teensy/49-teensy.rules
-sudo apt-get git
+sudo apt-get install git -y
