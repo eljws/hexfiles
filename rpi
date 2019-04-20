@@ -40,14 +40,21 @@ sudo npm install node-red-contrib-browser-utils
 sudo systemctl enable nodered.service
 cd /home/pi
 sudo apt-get install nginx-full certbot -y
-sudo certbot certonly --staging --authenticator standalone -d reversednwebsite.com  --pre-hook "service nginx stop" --post-hook "service nginx start"
+myhostname="$(dig -x $(dig +short myip.opendns.com @resolver1.opendns.com) +short)"
+sudo rm /etc/nginx/sites-enabled/default
+sudo rm /etc/nginx/sites-available/default
+sudo wget https://raw.githubusercontent.com/SET-LTD/hexfiles/master/node -P /etc/nginx/sites-available
+sudo sed -i "s/xxx/${myhostname}/g" /etc/nginx/sites-available/node
+sudo ln -s /etc/nginx/sites-available/node /etc/nginx/sites-enabled/node
+
+sudo certbot certonly  --authenticator standalone -d ${myhostname}  --pre-hook "service nginx stop" --post-hook "service nginx start"
 
 sudo wget http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key
 sudo apt-key add mosquitto-repo.gpg.key
 cd /etc/apt/sources.list.d/
 sudo wget http://repo.mosquitto.org/debian/mosquitto-stretch.list
 sudo apt-get update
-sudo apt-get install mosquitto mosquitto-clients
+sudo apt-get install mosquitto
 
 
 cd /home/pi
