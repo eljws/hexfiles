@@ -81,4 +81,5 @@ sed -i -e  "\$aPATH=\$PATH:/home/pi/cliflash"  .bashrc
 
 cd /etc/udev/rules.d/
 sudo wget https://www.pjrc.com/teensy/49-teensy.rules
+cd /home/pi
 sudo apt-get install git -y
