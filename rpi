@@ -27,34 +27,15 @@ echo "                                                                        ";
 
 echo "Starting Jakubs Script to install all software from clean image      ";
 
-sleep 1
+read -p "Do you wish to auto configure SSL?  Input y/n and hit enter: " askssl
 sudo apt-get update
 bash <(curl -sL https://raw.githubusercontent.com/node-red/raspbian-deb-package/master/resources/update-nodejs-and-nodered)
-sudo apt-get install moreutils -y
-sudo apt-get install dnsutils
 cd /home/pi/.node-red/
 sudo npm install -g node-red-admin
 sudo npm install node-red-dashboard
 sudo npm install node-red-contrib-arp
 sudo npm install node-red-contrib-browser-utils
 sudo systemctl enable nodered.service
-
-myhostnamedot="$(dig -x $(dig +short myip.opendns.com @resolver1.opendns.com) +short)"
-myhostname=`echo $myhostnamedot | sed "s/\.$//"`
-
-cd /home/pi
-sudo wget http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key
-sudo apt-key add mosquitto-repo.gpg.key
-cd /etc/apt/sources.list.d/
-sudo wget http://repo.mosquitto.org/debian/mosquitto-stretch.list
-sudo apt-get update
-sudo apt-get install mosquitto -y
-
-sudo rm /etc/mosquitto/mosquitto.conf
-sudo wget https://raw.githubusercontent.com/SET-LTD/hexfiles/master/mosquitto.conf -P /etc/mosquitto
-sudo sed -i "s/xxx/${myhostname}/g" /etc/mosquitto/mosquitto.conf
-
-
 
 cd /home/pi
 rm -rf cliflash
@@ -71,18 +52,39 @@ cd /home/pi/cliflash
 make
 cd /home/pi
 sed -i -e  "\$aPATH=\$PATH:/home/pi/cliflash"  .bashrc
+sudo wget https://www.pjrc.com/teensy/49-teensy.rules -P /etc/udev/rules.d
 
-cd /etc/udev/rules.d/
-sudo wget https://www.pjrc.com/teensy/49-teensy.rules
 cd /home/pi
+sudo apt-get install moreutils -y
+sudo apt-get install dnsutils
 sudo apt-get install git -y
+myhostnamedot="$(dig -x $(dig +short myip.opendns.com @resolver1.opendns.com) +short)"
+myhostname=`echo $myhostnamedot | sed "s/\.$//"`
 
+
+cd /home/pi
+sudo wget http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key -P /home/pi
+sudo apt-key add /home/pi/mosquitto-repo.gpg.key
+sudo wget http://repo.mosquitto.org/debian/mosquitto-stretch.list -P /etc/apt/sources.list.d
+sudo apt-get update
+sudo apt-get install mosquitto -y
+if [ "$askssl" = y ] ; then
+  sudo rm /etc/mosquitto/mosquitto.conf
+  sudo wget https://raw.githubusercontent.com/SET-LTD/hexfiles/master/mosquitto.conf -P /etc/mosquitto
+  sudo sed -i "s/xxx/${myhostname}/g" /etc/mosquitto/mosquitto.conf
+else
+  echo "not configured mosquitto SSL"
+fi
 cd /home/pi
 sudo apt-get install nginx-full certbot -y
-sudo rm /etc/nginx/sites-enabled/default
-sudo rm /etc/nginx/sites-available/default
-sudo wget https://raw.githubusercontent.com/SET-LTD/hexfiles/master/node -P /etc/nginx/sites-available
-sudo sed -i "s/xxx/${myhostname}/g" /etc/nginx/sites-available/node
-sudo ln -s /etc/nginx/sites-available/node /etc/nginx/sites-enabled/node
-sleep 1000
-sudo certbot certonly  --authenticator standalone -d ${myhostname}  --pre-hook "service nginx stop" --post-hook "service nginx start"
+if [ "$askssl" = y ] ; then
+  sudo rm /etc/nginx/sites-enabled/default
+  sudo rm /etc/nginx/sites-available/default
+  sudo wget https://raw.githubusercontent.com/SET-LTD/hexfiles/master/node -P /etc/nginx/sites-available
+  sudo sed -i "s/xxx/${myhostname}/g" /etc/nginx/sites-available/node
+  sudo ln -s /etc/nginx/sites-available/node /etc/nginx/sites-enabled/node
+  sleep 1000
+  sudo certbot certonly  --authenticator standalone -d ${myhostname}  --pre-hook "service nginx stop" --post-hook "service nginx start"
+else
+  echo "not configured nginx SSL"
+fi
