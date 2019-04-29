@@ -1,0 +1,1 @@
+[{"id":"897ad8e7.8ce498","type":"tab","label":"Flow 1","disabled":false,"info":""},{"id":"f74cfd3b.32f56","type":"inject","z":"897ad8e7.8ce498","name":"Oryginal","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":260,"y":840,"wires":[[]]}]
