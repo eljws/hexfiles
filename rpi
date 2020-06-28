@@ -35,7 +35,12 @@ sudo npm install -g node-red-admin
 sudo npm install node-red-dashboard
 sudo npm install node-red-contrib-arp
 sudo npm install node-red-contrib-browser-utils
-npm install node-red-contrib-socketcan
+#sudo npm install node-red-contrib-socketcan
+sudo npm install red-contrib-socketcan
+sudo sed -i -e "\$adtparam=spi=on" /boot/config.txt
+sudo sed -i -e "\$adtoverlay=mcp2515-can0,oscillator=16000000,interrupt=25" /boot/config.txt
+sudo sed -i -e "\$adtoverlay=spi-bcm2835-overlay" /boot/config.txt
+
 sudo systemctl enable nodered.service
 
 cd /home/pi
@@ -51,7 +56,7 @@ cd /home/pi
 rm -rf temp
 cd /home/pi/cliflash
 make
-cd /home/pi
+cd /home/pil
 sed -i -e  "\$aPATH=\$PATH:/home/pi/cliflash"  .bashrc
 sudo wget https://www.pjrc.com/teensy/49-teensy.rules -P /etc/udev/rules.d
 
@@ -68,7 +73,7 @@ sudo wget http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key -P /home/pi
 sudo apt-key add /home/pi/mosquitto-repo.gpg.key
 sudo wget http://repo.mosquitto.org/debian/mosquitto-buster.list -P /etc/apt/sources.list.d
 sudo apt-get update
-sudo apt-get install mosquitto -y
+#sudo apt-get install mosquitto -y
 if [ "$askssl" = y ] ; then
   sudo rm /etc/mosquitto/mosquitto.conf
   sudo wget https://raw.githubusercontent.com/SET-LTD/hexfiles/master/mosquitto.conf -P /etc/mosquitto
@@ -77,7 +82,7 @@ else
   echo "not configured mosquitto SSL"
 fi
 cd /home/pi
-sudo apt-get install nginx-full certbot -y
+#sudo apt-get install nginx-full certbot -y
 if [ "$askssl" = y ] ; then
   sudo rm /etc/nginx/sites-enabled/default
   sudo rm /etc/nginx/sites-available/default
