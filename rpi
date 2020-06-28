@@ -62,7 +62,7 @@ sudo wget https://www.pjrc.com/teensy/49-teensy.rules -P /etc/udev/rules.d
 
 cd /home/pi
 sudo apt-get install moreutils -y
-sudo apt-get install dnsutils
+sudo apt-get install dnsutils -y
 sudo apt-get install git -y
 myhostnamedot="$(dig -x $(dig +short myip.opendns.com @resolver1.opendns.com) +short)"
 myhostname=`echo $myhostnamedot | sed "s/\.$//"`
