@@ -28,7 +28,7 @@ echo "Starting Jakubs Script to install all software from clean image      ";
 read -p "Do you wish to auto configure SSL?  Input y/n and hit enter: " askssl
 sudo apt-get update
 sudo apt-get install can-utils
-sudo apt install build-essential git
+sudo apt install build-essential git -y
 bash <(curl -sL https://raw.githubusercontent.com/node-red/linux-installers/master/deb/update-nodejs-and-nodered)
 cd /home/pi/.node-red/
 sudo npm install -g node-red-admin
