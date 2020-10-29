@@ -1,6 +1,6 @@
 #!/bin/bash
 #start this script by typing: bash <(curl -sL https://raw.githubusercontent.com/SET-LTD/hexfiles/master/rpi)
-#to do
+
 
 echo "          _____                    _____                _____           ";
 echo "         /\    \                  /\    \              /\    \          ";
