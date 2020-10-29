@@ -102,3 +102,5 @@ if [ "$askssl" = y ] ; then
 else
   echo "not configured nginx SSL"
 fi
+
+sudo-node-red-start
